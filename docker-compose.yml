@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  #
+  # nginx-mruby
+  #
+  nginx-mruby:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: service
+      args:
+        NGINX_BRANCH: ${NGINX_BRANCH:-alpine}
+        MRUBY_VERSION: ${MRUBY_VERSION:-master}
+        NGX_MRUBY_VERSION: ${NGX_MRUBY_VERSION:-master}
+      cache_from:
+        - nginx:${NGINX_BRANCH:-alpine}
+        - docker.io/library/nginx:${NGINX_BRANCH:-alpine}
+    image: ${ORGANIZATION:-takumi}/${REPOSITORY:-nginx-mruby}:latest
+    hostname: nginx-mruby
+    container_name: nginx-mruby
+    cap_add:
+      - FOWNER
+      - CHOWN
+      - SETUID
+      - SETGID
+    cap_drop:
+      - ALL
+    networks:
+      - nginx-mruby
+    ports:
+      - 8080:80
+    environment:
+      TZ: Asia/Tokyo
+    restart: unless-stopped
+
+networks:
+  nginx-mruby:
+    name: nginx-mruby
