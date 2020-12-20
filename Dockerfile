@@ -46,13 +46,17 @@ RUN ln -s /src/ngx_mruby/mrbgems/ngx_mruby_mrblib /src/mruby/mrbgems/ngx_mruby &
     rake -j $(nproc) 2>&1 | tee /var/log/mruby.log
 
 WORKDIR /src/ngx_mruby
-RUN NGINX_CONFIG_OPT="$(nginx -V 2>&1 | sed -n -E 's/^.*arguments: //p')" && \
+RUN ARGS="$(nginx -V 2>&1 | sed -n -E 's/^.*arguments: //p' | sed -E 's/ --with-cc-opt='\''.*'\''//; s/ --with-ld-opt=[^ ]+//;')" && \
+    CC_OPTS="$(nginx -V 2>&1 | sed -n -E 's/^.*arguments: //p' | sed -E 's/.*--with-cc-opt='\''(.*)'\''.*/\1/')" && \
+    LD_OPTS="$(nginx -V 2>&1 | sed -n -E 's/^.*arguments: //p' | sed -E 's/.*--with-ld-opt=([^ ]+).*/\1/')" && \
     ./configure \
     --enable-dynamic-module \
-    --with-build-dir=/build/ngx_mruby \
-    --with-mruby-root=/src/mruby \
-    --with-ngx-src-root=/src/nginx \
-    --with-ngx-config-opt="$CONFARGS" && \
+    --with-build-dir="/build/ngx_mruby" \
+    --with-mruby-root="/src/mruby" \
+    --with-mruby-libdir="/build/mruby/host/lib" \
+    --with-mruby-incdir="/src/mruby/src /src/mruby/include" \
+    --with-ngx-src-root="/src/nginx" \
+    --with-ngx-config-opt="$ARGS --with-cc-opt=\"$CC_OPTS\" --with-ld-opt=\"$LD_OPTS\"" && \
     { \
       echo 'include /build/mruby/host/lib/libmruby.flags.mak'; \
       echo '.PHONY: all'; \
