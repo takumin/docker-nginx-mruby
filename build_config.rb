@@ -16,6 +16,8 @@ MRuby::Build.new('host') do |conf|
   conf.gem :github => 'matsumotory/mruby-mutex'
   conf.gem :github => 'matsumotory/mruby-localmemcache'
   conf.gem :mgem => 'mruby-secure-random'
+  conf.gem :mgem => 'mruby-time-strftime'
+  conf.gem :mgem => 'mruby-http'
 
   conf.cc do |cc|
     cc.flags << '-fPIC'
