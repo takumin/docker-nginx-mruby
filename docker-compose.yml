@@ -11,8 +11,6 @@ services:
       target: service
       args:
         NGINX_BRANCH: ${NGINX_BRANCH:-alpine}
-        MRUBY_VERSION: ${MRUBY_VERSION:-master}
-        NGX_MRUBY_VERSION: ${NGX_MRUBY_VERSION:-master}
       cache_from:
         - nginx:${NGINX_BRANCH:-alpine}
         - docker.io/library/nginx:${NGINX_BRANCH:-alpine}

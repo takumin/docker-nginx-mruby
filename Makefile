@@ -9,14 +9,10 @@ REPOSITORY   ?= nginx-mruby
 # Docker Build Variables
 #
 
-NGINX_BRANCH      ?= alpine
-MRUBY_VERSION     ?= master
-NGX_MRUBY_VERSION ?= master
+NGINX_BRANCH ?= alpine
 
 BUILD_ARGS ?=
 BUILD_ARGS += --build-arg NGINX_BRANCH=$(NGINX_BRANCH)
-BUILD_ARGS += --build-arg MRUBY_VERSION=$(MRUBY_VERSION)
-BUILD_ARGS += --build-arg NGX_MRUBY_VERSION=$(NGX_MRUBY_VERSION)
 
 ifneq (x${no_proxy}x,xx)
 BUILD_ARGS += --build-arg no_proxy=${no_proxy}
@@ -50,7 +46,7 @@ endif
 # Docker Run Variables
 #
 
-RUN_ARGS ?= env NGINX_BRANCH=$(NGINX_BRANCH) MRUBY_VERSION=$(MRUBY_VERSION) NGX_MRUBY_VERSION=$(NGX_MRUBY_VERSION)
+RUN_ARGS ?= env NGINX_BRANCH=$(NGINX_BRANCH)
 
 #
 # Default Rules
